@@ -455,9 +455,9 @@ class SitemapGenerator
             $this->xmlWriter->writePi('xml-stylesheet',
                 sprintf('type="text/xsl" href="%s"', $this->sitemapStylesheetLink));
         }
-        $this->xmlWriter->writeComment(sprintf('generator-class="%s"', get_class($this)));
-        $this->xmlWriter->writeComment(sprintf('generator-version="%s"', $this->classVersion));
-        $this->xmlWriter->writeComment(sprintf('generated-on="%s"', date('c')));
+        // $this->xmlWriter->writeComment(sprintf('generator-class="%s"', get_class($this)));
+        // $this->xmlWriter->writeComment(sprintf('generator-version="%s"', $this->classVersion));
+        // $this->xmlWriter->writeComment(sprintf('generated-on="%s"', date('c')));
         $this->xmlWriter->startElement('urlset');
         $this->xmlWriter->writeAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
         $this->xmlWriter->writeAttribute('xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
@@ -644,16 +644,16 @@ class SitemapGenerator
         }
     }
 
-    private function createSitemapIndex(array $sitemapsUrls, string $sitemapIndexFileName): void
+    public function createSitemapIndex(array $sitemapsUrls, string $sitemapIndexFileName): void
     {
         $this->xmlWriter->flush();
         $this->writeSitemapIndexStart();
         foreach ($sitemapsUrls as $sitemapsUrl) {
-            $this->writeSitemapIndexUrl($sitemapsUrl);
+            $this->writeSitemapIndexUrl($this->baseURL . $sitemapsUrl);
         }
         $this->writeSitemapIndexEnd();
         $this->fs->file_put_contents(
-            $sitemapIndexFileName,
+            $this->saveDirectory . $sitemapIndexFileName,
             $this->xmlWriter->flush(),
         );
     }
@@ -661,9 +661,9 @@ class SitemapGenerator
     protected function writeSitemapIndexStart(): void
     {
         $this->xmlWriter->startDocument("1.0", "UTF-8");
-        $this->xmlWriter->writeComment(sprintf('generator-class="%s"', get_class($this)));
-        $this->xmlWriter->writeComment(sprintf('generator-version="%s"', $this->classVersion));
-        $this->xmlWriter->writeComment(sprintf('generated-on="%s"', date('c')));
+        // $this->xmlWriter->writeComment(sprintf('generator-class="%s"', get_class($this)));
+        // $this->xmlWriter->writeComment(sprintf('generator-version="%s"', $this->classVersion));
+        // $this->xmlWriter->writeComment(sprintf('generated-on="%s"', date('c')));
         $this->xmlWriter->startElement('sitemapindex');
         $this->xmlWriter->writeAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
         $this->xmlWriter->writeAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
